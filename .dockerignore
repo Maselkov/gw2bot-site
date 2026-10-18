@@ -1,0 +1,10 @@
+node_modules
+.nuxt
+dist
+.git
+.env
+*.log
+.eslintcache
+Dockerfile
+docker-compose.yml
+.dockerignore

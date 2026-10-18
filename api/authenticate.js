@@ -42,7 +42,7 @@ export async function authenticate (req, res, next) {
 
   if (user === 0) { return }
 
-  if (dpsToken !== user.cogs.GuildWars2.dpsreport_token) {
+  if (dpsToken !== user.dpsreport_token) {
     res.status(400).send({
       message: 'Bad Request',
       cause: 'Invalid token'

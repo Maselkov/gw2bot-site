@@ -26,6 +26,15 @@ npm run build
 npm run start
 ```
 
+### Docker
+
+``` bash
+# Build and run the production server on port 3000
+docker compose up -d --build
+```
+
+The container connects to MongoDB on the host by default (`host.docker.internal`). Set `MONGO_HOST`, `MONGO_PORT`, `MONGO_DB` or `PORT` in your shell or a `.env` file to change this. `MONGO_DB` defaults to `gw2bot`, GW2Bot's own database, and must match the bot's `MONGO_DB`. If MongoDB runs on the host, its `bindIp` must include an address that Docker can reach, such as the docker bridge IP or `0.0.0.0`, and not just `localhost`.
+
 ### Nuxt configuration
 
 You must replace `YOUR_BOT_ID` in the file `./nuxt.config.js` with your Discord bot's Client ID for authentication.

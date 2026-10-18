@@ -76,8 +76,8 @@ server.get('/user', async (req, res) => {
 
     // Clear stale cookies
     if (
-      req.cookies.accountName !== user.cogs.GuildWars2.key.account_name ||
-      req.cookies.dpsToken !== user.cogs.GuildWars2.dpsreport_token
+      req.cookies.accountName !== user.key.account_name ||
+      req.cookies.dpsToken !== user.dpsreport_token
     ) {
       res.clearCookie('userID', cookieOptions)
         .clearCookie('accountName', cookieOptions)
@@ -89,7 +89,7 @@ server.get('/user', async (req, res) => {
       return
     }
 
-    res.send(user.cogs.GuildWars2.key.account_name)
+    res.send(user.key.account_name)
     return
   }
 
@@ -122,8 +122,8 @@ server.get('/user', async (req, res) => {
   }
 
   // accountName is from user's active API key (changes with /key switch)
-  const accountName = user.cogs.GuildWars2.key.account_name
-  const dpsToken = user.cogs.GuildWars2.dpsreport_token
+  const accountName = user.key.account_name
+  const dpsToken = user.dpsreport_token
 
   res.cookie('userID', discordUser.id, cookieOptions)
     .cookie('accountName', accountName, cookieOptions)
@@ -132,7 +132,7 @@ server.get('/user', async (req, res) => {
 })
 
 server.get('/encounters', async (req, res) => {
-  const encounters = await database.getCollection('gw2.encounters', res)
+  const encounters = await database.getCollection('encounters', res)
 
   if (encounters === 0) { return }
 
@@ -183,7 +183,7 @@ server.get('/encounters/:name', async (req, res) => {
     return
   }
 
-  const encounters = await database.getCollection('gw2.encounters', res)
+  const encounters = await database.getCollection('encounters', res)
 
   if (encounters === 0) { return }
 
@@ -218,7 +218,7 @@ if (process.env.NODE_ENV === 'development') {
       return
     }
 
-    const encounters = await database.getCollection('gw2.encounters_test', res)
+    const encounters = await database.getCollection('encounters_test', res)
 
     if (encounters === 0) { return }
 
@@ -261,7 +261,7 @@ if (process.env.NODE_ENV === 'development') {
       return
     }
 
-    const encounters = await database.getCollection('gw2.encounters_test', res)
+    const encounters = await database.getCollection('encounters_test', res)
 
     if (encounters === 0) { return }
 
@@ -285,7 +285,7 @@ server.post('/encounters/:id', express.json(), async (req, res) => {
     return
   }
 
-  const encounters = await database.getCollection('gw2.encounters', res)
+  const encounters = await database.getCollection('encounters', res)
 
   if (encounters === 0) { return }
 

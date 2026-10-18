@@ -61,7 +61,8 @@ export default {
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/color-mode',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    '@nuxtjs/stylelint-module'
   ],
   /*
   ** Settings for '@nuxtjs/style-resources' module
@@ -79,8 +80,7 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/auth'
   ],
   /*
   ** Settings for '@nuxtjs/axios' module

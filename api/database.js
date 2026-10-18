@@ -21,7 +21,7 @@ export async function getCollection (collection, res) {
     return 0
   }
 
-  return client.db(process.env.MONGO_DB || 'toothy').collection(collection)
+  return client.db(process.env.MONGO_DB || 'gw2bot').collection(collection)
 }
 
 export async function getUser (userID, res) {
@@ -39,7 +39,7 @@ export async function getUser (userID, res) {
     return 0
   }
 
-  if (user.cogs.GuildWars2.dpsreport_token) {
+  if (user.dpsreport_token) {
     return user
   }
 
@@ -61,11 +61,11 @@ export async function getUser (userID, res) {
 
   await users.updateOne({ _id: userID }, {
     $set: {
-      'cogs.GuildWars2.dpsreport_token': dpsToken.userToken
+      dpsreport_token: dpsToken.userToken
     }
   })
 
-  user.cogs.GuildWars2.dpsreport_token = dpsToken.userToken
+  user.dpsreport_token = dpsToken.userToken
 
   return user
 }
