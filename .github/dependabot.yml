@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Nuxt 2 (Vue 2 / webpack 4) stack: these majors require migrating to Nuxt 3+.
+      - dependency-name: nuxt
+        update-types: [version-update:semver-major]
+      - dependency-name: "@nuxtjs/*"
+        update-types: [version-update:semver-major]
+      - dependency-name: floating-vue
+        update-types: [version-update:semver-major]
+      - dependency-name: sass-loader
+        update-types: [version-update:semver-major]
+      - dependency-name: responsive-loader
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # Track the Node LTS line deliberately rather than jumping to every new major.
+      - dependency-name: node
+        update-types: [version-update:semver-major]
