@@ -1,0 +1,45 @@
+name: Deploy production
+
+# Pushing a v* tag on a master commit deploys it to production after approval
+# on the "prod" environment.
+on:
+  push:
+    tags: ["v*"]
+
+# Jobs that need more ask for it
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Tag must be on master
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/master
+
+  build:
+    needs: verify
+    uses: ./.github/workflows/_build.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      tags: ${{ github.ref_name }}
+
+  deploy:
+    needs: build
+    uses: ./.github/workflows/_deploy.yml
+    permissions:
+      contents: read
+    # Environment secrets only reach a reusable workflow when inherited
+    secrets: inherit
+    with:
+      environment: prod
+      image: ${{ needs.build.outputs.image }}

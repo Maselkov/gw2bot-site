@@ -31,7 +31,56 @@ npm run start
 ``` bash
 # Build and run the production server on port 3000
 docker compose up -d --build
+
+# Or run the prebuilt image instead of building locally
+docker compose pull && docker compose up -d
 ```
+
+GitHub Actions lints and builds every pull request. Pushes to `master` also publish the image to `ghcr.io/maselkov/gw2bot-site` as `latest` and as the full commit SHA. Set `TAG` to run a specific image, for example `TAG=v1.1.2`.
+
+### Deployment
+
+Pushing a `v*` tag on a `master` commit deploys that commit to production, after approval on the `prod` GitHub environment. The site runs as a `site` service in the same compose project as GW2Bot on the server, and deploys the same way: a self-hosted runner connects over SSH, pins the image and recreates only the site's container. The deploy fails unless the container reports healthy.
+
+``` bash
+git tag v1.2.0 && git push origin v1.2.0
+```
+
+Each deployed service pins its image in its own file: `docker-compose.site.yml` for the site and `docker-compose.bot.yml` for GW2Bot. This way the deploys never overwrite each other, and `docker-compose.override.yml` stays free for manual changes.
+
+One-time setup on the server, in the directory that holds the compose file (`DEPLOY_DIR`):
+
+1. Add the service to `docker-compose.yml`:
+
+   ``` yaml
+   site:
+     image: ghcr.io/maselkov/gw2bot-site
+     restart: unless-stopped
+     depends_on:
+       mongo:
+         condition: service_healthy
+     environment:
+       MONGO_HOST: mongo
+       MONGO_PORT: 27017
+     ports:
+       # For the reverse proxy in front of gw2bot.info
+       - "127.0.0.1:3000:3000"
+   ```
+
+   If GW2Bot's `.env` sets `MONGO_DB`, set the same value here.
+
+2. Make compose merge the pins by adding this line to `.env` in the same directory (create the file if needed). Both deploys refuse to run without it:
+
+   ``` bash
+   COMPOSE_FILE=docker-compose.yml:docker-compose.override.yml:docker-compose.bot.yml:docker-compose.site.yml
+   ```
+
+   Every listed file must exist, so run `touch docker-compose.override.yml docker-compose.bot.yml docker-compose.site.yml` before the first deploy.
+
+On GitHub:
+
+- Add a `prod` environment to this repository with the same `SSH_HOST`, `SSH_USER`, `SSH_KEY`, `SSH_KNOWN_HOSTS` and `DEPLOY_DIR` secrets as GW2Bot.
+- Register a self-hosted runner for this repository. Runners on a personal account belong to a single repository, so GW2Bot's runner won't pick up these jobs.
 
 The container connects to MongoDB on the host by default (`host.docker.internal`). Set `MONGO_HOST`, `MONGO_PORT`, `MONGO_DB` or `PORT` in your shell or a `.env` file to change this. `MONGO_DB` defaults to `gw2bot`, GW2Bot's own database, and must match the bot's `MONGO_DB`. If MongoDB runs on the host, its `bindIp` must include an address that Docker can reach, such as the docker bridge IP or `0.0.0.0`, and not just `localhost`.
 

@@ -1,0 +1,23 @@
+name: CI
+
+# Pull requests are linted and built. Pushes to master also publish
+# ghcr.io/<owner>/gw2bot-site:<sha> and :latest, which a release then reuses.
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Jobs that need more ask for it
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      push: ${{ github.event_name == 'push' }}
+      tags: ${{ github.event_name == 'push' && 'latest' || '' }}

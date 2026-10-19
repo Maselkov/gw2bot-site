@@ -1,7 +1,7 @@
 services:
   site:
     build: .
-    image: gw2bot-site
+    image: ghcr.io/maselkov/gw2bot-site:${TAG:-latest}
     restart: unless-stopped
     ports:
       - "${PORT:-3000}:3000"

@@ -1,0 +1,94 @@
+name: Deploy
+
+# Runs on the self-hosted runner, which only needs ssh: it pins the image in
+# docker-compose.site.yml on the host and recreates the site's container. The
+# site is a service in the host's compose file next to GW2Bot. It keeps its own
+# override file because GW2Bot's deploy rewrites docker-compose.override.yml;
+# the host's .env lists both in COMPOSE_FILE. The SSH_* and DEPLOY_DIR secrets
+# come from the environment passed in.
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      image:
+        type: string
+        required: true
+      service:
+        description: Compose service running the site
+        type: string
+        default: site
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+    env:
+      IMAGE: ${{ inputs.image }}
+      SERVICE: ${{ inputs.service }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      DEPLOY_DIR: ${{ secrets.DEPLOY_DIR }}
+    steps:
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          dir="$RUNNER_TEMP/ssh"
+          mkdir -p "$dir" && chmod 700 "$dir"
+          printf '%s\n' "$SSH_KEY" > "$dir/key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$dir/known_hosts"
+          chmod 600 "$dir/key"
+          cat > "$dir/config" <<EOF
+          Host target
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile $dir/key
+            UserKnownHostsFile $dir/known_hosts
+            StrictHostKeyChecking yes
+            BatchMode yes
+          EOF
+          echo "SSH_CONFIG=$dir/config" >> "$GITHUB_ENV"
+
+      - name: Deploy
+        run: |
+          ssh -F "$SSH_CONFIG" target bash -s -- "$DEPLOY_DIR" "$IMAGE" "$SERVICE" <<'EOF'
+          set -euo pipefail
+          cd "${1/#\~/$HOME}"
+          printf 'services:\n  %s:\n    image: %s\n' "$3" "$2" > docker-compose.site.yml
+          # Without COMPOSE_FILE in .env, compose ignores the pin above and
+          # would run whatever image docker-compose.yml names
+          if ! docker compose config --images "$3" | grep -qxF "$2"; then
+            echo "::error::$3 doesn't resolve to $2; add docker-compose.site.yml to COMPOSE_FILE in $1/.env" >&2
+            exit 1
+          fi
+          docker compose pull "$3"
+          docker compose up -d --no-build --no-deps "$3"
+          docker image prune -f
+          EOF
+
+      - name: Smoke check
+        run: |
+          ssh -F "$SSH_CONFIG" target bash -s -- "$DEPLOY_DIR" "$SERVICE" <<'EOF'
+          set -euo pipefail
+          cd "${1/#\~/$HOME}"
+          id="$(docker compose ps -q "$2")"
+          # Wait for the image's healthcheck to load the home page
+          for _ in $(seq 30); do
+            health="$(docker inspect -f '{{.State.Health.Status}}' "$id")"
+            [ "$health" = starting ] || break
+            sleep 2
+          done
+          docker compose logs --tail 50 "$2"
+          status="$(docker inspect -f '{{.State.Status}} {{.RestartCount}} {{.State.Health.Status}}' "$id")"
+          echo "$2: $status"
+          [ "$status" = "running 0 healthy" ]
+          EOF
+
+      - name: Clean up SSH key
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/ssh"
