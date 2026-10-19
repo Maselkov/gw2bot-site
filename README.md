@@ -7,9 +7,7 @@ Visit [gw2bot.info](https://gw2bot.info/) to see the live website.
 
 This website is built using [Nuxt.js](https://v2.nuxt.com/) and takes advantage of an embedded [Express.js](https://expressjs.com/) API.
 
-It showcases some features of the bot, lists the available commands, and hosts a couple of FAQs.
-
-It also has Discord authentication for viewing encounter logs that are uploaded via the bot.
+It showcases some features of the bot, lists the available commands, and hosts a couple of FAQs. The Express API at `/v1` lets third-party log uploaders such as PlenBot queue dps.report logs for GW2Bot to post.
 
 ## Setup
 
