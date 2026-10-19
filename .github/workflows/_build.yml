@@ -1,6 +1,6 @@
 name: Build image
 
-# Lints, then builds ghcr.io/<owner>/gw2bot-site:<sha>. An image that was
+# Lints and tests, then builds ghcr.io/<owner>/gw2bot-site:<sha>. An image that was
 # already pushed for this commit (e.g. by CI on master) is reused, so prod
 # gets the exact image that CI built.
 on:
@@ -21,14 +21,60 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    container: node:22-bookworm-slim
+    container: node:24-bookworm-slim
     steps:
       - uses: actions/checkout@v7
       - run: npm ci --ignore-scripts --no-audit --no-fund
+      # Generates .nuxt, which the ESLint config extends
+      - run: npx nuxt prepare
       - run: npm run lint
 
-  build:
+  # Runs the API and page tests against the image, with a throwaway MongoDB
+  test:
     needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: gw2bot-site:test
+          cache-from: type=gha
+
+      - name: Start site and MongoDB
+        run: docker compose -f docker-compose.test.yml up -d --wait
+
+      - name: Install dependencies
+        run: >
+          docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/app -w /app
+          node:24-bookworm-slim npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: API tests
+        run: >
+          docker run --rm --network host -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/app -w /app
+          node:24-bookworm-slim npm test
+
+      - name: Page tests
+        run: npm run test:e2e:docker
+
+      - name: Site logs
+        if: failure()
+        run: docker compose -f docker-compose.test.yml logs site
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  build:
+    needs: [lint, test]
     runs-on: ubuntu-latest
     permissions:
       contents: read

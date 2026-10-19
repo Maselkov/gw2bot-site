@@ -9,17 +9,8 @@ updates:
       npm-minor-and-patch:
         update-types: [minor, patch]
     ignore:
-      # Nuxt 2 (Vue 2 / webpack 4) stack: these majors require migrating to Nuxt 3+.
-      - dependency-name: nuxt
-        update-types: [version-update:semver-major]
-      - dependency-name: "@nuxtjs/*"
-        update-types: [version-update:semver-major]
-      - dependency-name: floating-vue
-        update-types: [version-update:semver-major]
-      - dependency-name: sass-loader
-        update-types: [version-update:semver-major]
-      - dependency-name: responsive-loader
-        update-types: [version-update:semver-major]
+      # Pinned to match the Playwright image used for screenshots
+      - dependency-name: "@playwright/test"
 
   - package-ecosystem: github-actions
     directory: /

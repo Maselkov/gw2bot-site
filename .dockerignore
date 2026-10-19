@@ -8,3 +8,9 @@ dist
 Dockerfile
 docker-compose.yml
 .dockerignore
+tests
+test-results
+playwright-report
+playwright.config.mjs
+docker-compose.test.yml
+.output

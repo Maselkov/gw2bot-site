@@ -1,0 +1,164 @@
+/*---------------------------------------------------------------------------*\
+    Typography
+\*---------------------------------------------------------------------------*/
+a {
+  // Remove the gray background on active links in IE 10.
+  background-color: transparent;
+  color: $link;
+  text-decoration: underline;
+  &:hover {
+    text-decoration: none;
+  }
+  .dark-mode & {
+    color: $link-dark;
+  }
+}
+
+.inline-svg {
+  display: inline-block;
+  width: $p-line-rem;
+  height: $p-line-rem;
+  vertical-align: top;
+}
+
+dfn {
+  font-style: normal;
+}
+
+abbr[title] {
+  cursor: help;
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+  &:hover {
+    border: 0;
+  }
+}
+
+h1 {
+  margin: $h1-margin-rem 0 0 0;
+  font-size: $h1-font-rem;
+  line-height: $h1-line-rem;
+  font-weight: 700;
+}
+
+h2, .h2 {
+  margin: $h2-margin-rem 0 0 0;
+  font-size: $h2-font-rem;
+  line-height: $h2-line-rem;
+  font-weight: 700;
+}
+
+h3, .h3 {
+  margin: $h3-margin-rem 0 0 0;
+  font-size: $h3-font-rem;
+  line-height: $h3-line-rem;
+  font-weight: 700;
+}
+
+h4, .h4 {
+  margin: $h4-margin-rem 0 0 0;
+  font-size: $h4-font-rem;
+  line-height: $h4-line-rem;
+  font-weight: 700;
+}
+
+h5, .h5 {
+  margin: $h5-margin-rem 0 0 0;
+  font-size: $h5-font-rem;
+  line-height: $h5-line-rem;
+  font-weight: 700;
+  color: $grey-350;
+  .dark-mode & {
+    color: $grey-1100;
+  }
+}
+
+h6, .h6 {
+  margin: $p-margin-rem 0 0 0;
+  font-size: $p-font-rem;
+  line-height: $p-line-rem;
+  font-weight: 400;
+}
+
+h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  @extend %Header-font-family;
+  position: relative;
+  display: block;
+  font-variant-ligatures: discretionary-ligatures;
+  color: $grey-250;
+  .dark-mode & {
+    color: $grey-1150;
+  }
+}
+
+code, pre {
+  @extend %Code-font-family;
+  padding: 1px 3px;
+  background: $grey-1100;
+  border-radius: 3px;
+  font-size: 95%;
+  font-variant-ligatures: no-discretionary-ligatures;
+  .dark-mode & {
+    background: $grey-500;
+  }
+}
+
+p, .paragraph, li {
+  @extend %Body-font-family;
+  margin: $p-margin-rem 0 0 0;
+  font-size: $p-font-rem;
+  line-height: $p-line-rem;
+}
+
+small, .small-text {
+  font-size: $small-font-rem;
+  line-height: $small-line-rem;
+  vertical-align: top;
+  .inline-svg {
+    width: $small-line-rem;
+    height: $small-line-rem;
+  }
+}
+
+.smaller {
+  font-size: $x-small-font-rem;
+}
+
+li {
+  width: 100%;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0 0 0 $gutter-px;
+  text-align: left;
+  list-style-position: outside;
+  li {
+    counter-increment: listCounter;
+    & ~ li {
+      margin: ($baseline-rem * .5) 0 0;
+    }
+  }
+
+  /*ul li, ol li {
+    counter-increment: listCounter2;
+  }*/
+}
+
+.single-line {
+  white-space: nowrap;
+}
+
+.bold-text {
+  font-weight: 700;
+}
+
+.italic-text {
+  font-style: italic;
+}
+
+em, .italic-text {
+  a.external:after {
+    transform: skew(-14deg) translate(1px);
+  }
+}

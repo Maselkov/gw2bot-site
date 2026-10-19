@@ -5,13 +5,13 @@ Visit [gw2bot.info](https://gw2bot.info/) to see the live website.
 
 ## About
 
-This website is built using [Nuxt.js](https://v2.nuxt.com/) and takes advantage of an embedded [Express.js](https://expressjs.com/) API.
+This website is built using [Nuxt](https://nuxt.com/), with its API served by Nuxt's [Nitro](https://nitro.build/) server.
 
-It showcases some features of the bot, lists the available commands, and hosts a couple of FAQs.
-
-It also has Discord authentication for viewing encounter logs that are uploaded via the bot.
+It showcases some features of the bot, lists the available commands, and hosts a couple of FAQs. The Express API at `/v1` lets third-party log uploaders such as PlenBot queue dps.report logs for GW2Bot to post.
 
 ## Setup
+
+Requires Node 22.12+ with npm 11 or newer (the Docker image uses Node 24). npm 10 fails to install Nuxt 4's dependency tree.
 
 ``` bash
 # Install dependencies
@@ -26,6 +26,25 @@ npm run build
 npm run start
 ```
 
+### Tests
+
+The tests run against a built image with a throwaway MongoDB 9, and never call dps.report:
+
+``` bash
+docker compose -f docker-compose.test.yml up -d --build --wait
+
+# Contract tests for the /v1 API (needs Node 22+)
+npm test
+
+# Page smoke and screenshot tests, run in the Playwright image so the
+# screenshots match CI
+npm run test:e2e:docker
+
+docker compose -f docker-compose.test.yml down
+```
+
+The screenshot baselines are in `tests/e2e/__screenshots__`. When a visual change is intended, review it and update them with `npm run test:e2e:docker -- --update-snapshots`.
+
 ### Docker
 
 ``` bash
@@ -36,7 +55,7 @@ docker compose up -d --build
 docker compose pull && docker compose up -d
 ```
 
-GitHub Actions lints and builds every pull request. Pushes to `master` also publish the image to `ghcr.io/maselkov/gw2bot-site` as `latest` and as the full commit SHA. Set `TAG` to run a specific image, for example `TAG=v1.1.2`.
+GitHub Actions lints, tests and builds every pull request. Pushes to `master` also publish the image to `ghcr.io/maselkov/gw2bot-site` as `latest` and as the full commit SHA. Set `TAG` to run a specific image, for example `TAG=v1.1.2`.
 
 ### Deployment
 
