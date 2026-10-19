@@ -10,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   expect: {
-    toHaveScreenshot: { maxDiffPixelRatio: 0.01 }
+    toHaveScreenshot: { maxDiffPixels: 50 }
   },
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3999',

@@ -34,9 +34,9 @@ function watchForErrors (page, { allowStatus } = {}) {
   page.on('response', (response) => {
     const request = response.request()
     if (
-      response.url().startsWith(origin) &&
-      response.status() >= 400 &&
-      !(request.isNavigationRequest() && response.status() === allowStatus)
+      response.url().startsWith(origin)
+      && response.status() >= 400
+      && !(request.isNavigationRequest() && response.status() === allowStatus)
     ) {
       errors.push(`response: ${response.status()} ${response.url()}`)
     }
@@ -57,8 +57,8 @@ async function settle (page) {
   })
   await page.waitForLoadState('networkidle')
   await page.waitForFunction(() =>
-    document.querySelectorAll('img.lazyloading').length === 0 &&
-    [...document.images].every(img => img.complete)
+    document.querySelectorAll('img.lazyloading').length === 0
+    && [...document.images].every(img => img.complete)
   )
   await page.evaluate(() => document.fonts.ready)
 }

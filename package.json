@@ -4,49 +4,41 @@
   "description": "The website of GW2Bot, a Discord bot",
   "author": "Matt Bryant, Muhammed Bacalan",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt dev",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "start": "node .output/server/index.mjs",
     "generate": "nuxt generate",
+    "postinstall": "nuxt prepare",
     "lint": "npm run lint:js && npm run lint:style",
-    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint:js": "eslint .",
     "lint:style": "stylelint \"**/*.{scss,vue}\" --ignore-path .gitignore",
     "test": "node --test \"tests/api/**/*.test.mjs\"",
     "test:e2e": "playwright test",
     "test:e2e:docker": "docker run --rm --network host --ipc host -u \"$(id -u):$(id -g)\" -e HOME=/tmp -e CI -e BASE_URL -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.64.1-noble npx playwright test"
   },
   "dependencies": {
-    "@nuxtjs/color-mode": "^2.1.1",
-    "@nuxtjs/style-resources": "^1.2.2",
-    "express": "^5.3.0",
-    "floating-vue": "^1.0.0-beta.19",
+    "@nuxtjs/color-mode": "^4.0.1",
+    "floating-vue": "^5.4.0",
     "lazysizes": "^5.3.2",
     "mongodb": "^7.7.0",
-    "nuxt": "^2.17.3",
+    "nuxt": "^4.6.2",
     "rellax": "^1.12.1",
-    "sass": "^1.69.7",
-    "sass-loader": "^10.5.2"
+    "sass": "^1.105.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.23.3",
-    "@nuxtjs/eslint-config": "^12.0.0",
-    "@nuxtjs/eslint-module": "^3.1.0",
+    "@nuxt/eslint": "^1.17.0",
     "@playwright/test": "1.64.1",
-    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint": "^10.13.0",
     "postcss-html": "^2.0.0",
-    "responsive-loader": "^2.3.0",
-    "sharp": "^0.35.5",
     "stylelint": "^17.16.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-config-standard-vue": "^2.0.0",
-    "vue-eslint-parser": "^9.4.0"
-  },
-  "overrides": {
-    "webpack-dev-middleware": "5.0.0"
+    "vite-imagetools": "^12.0.1"
   },
   "engines": {
-    "node": ">= 20.19.0",
+    "node": "^20.19.0 || >=22.12.0",
     "npm": ">= 10.1.0"
   }
 }

@@ -13,3 +13,4 @@ test-results
 playwright-report
 playwright.config.mjs
 docker-compose.test.yml
+.output

@@ -93,3 +93,7 @@ sw.*
 # Playwright
 /test-results/
 /playwright-report/
+
+# Nuxt build output
+.output
+.data

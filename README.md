@@ -5,11 +5,13 @@ Visit [gw2bot.info](https://gw2bot.info/) to see the live website.
 
 ## About
 
-This website is built using [Nuxt.js](https://v2.nuxt.com/) and takes advantage of an embedded [Express.js](https://expressjs.com/) API.
+This website is built using [Nuxt](https://nuxt.com/), with its API served by Nuxt's [Nitro](https://nitro.build/) server.
 
 It showcases some features of the bot, lists the available commands, and hosts a couple of FAQs. The Express API at `/v1` lets third-party log uploaders such as PlenBot queue dps.report logs for GW2Bot to post.
 
 ## Setup
+
+Requires Node 22.12+ with npm 11 or newer (the Docker image uses Node 24). npm 10 fails to install Nuxt 4's dependency tree.
 
 ``` bash
 # Install dependencies
