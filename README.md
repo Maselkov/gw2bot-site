@@ -24,6 +24,25 @@ npm run build
 npm run start
 ```
 
+### Tests
+
+The tests run against a built image with a throwaway MongoDB 9, and never call dps.report:
+
+``` bash
+docker compose -f docker-compose.test.yml up -d --build --wait
+
+# Contract tests for the /v1 API (needs Node 22+)
+npm test
+
+# Page smoke and screenshot tests, run in the Playwright image so the
+# screenshots match CI
+npm run test:e2e:docker
+
+docker compose -f docker-compose.test.yml down
+```
+
+The screenshot baselines are in `tests/e2e/__screenshots__`. When a visual change is intended, review it and update them with `npm run test:e2e:docker -- --update-snapshots`.
+
 ### Docker
 
 ``` bash
@@ -34,7 +53,7 @@ docker compose up -d --build
 docker compose pull && docker compose up -d
 ```
 
-GitHub Actions lints and builds every pull request. Pushes to `master` also publish the image to `ghcr.io/maselkov/gw2bot-site` as `latest` and as the full commit SHA. Set `TAG` to run a specific image, for example `TAG=v1.1.2`.
+GitHub Actions lints, tests and builds every pull request. Pushes to `master` also publish the image to `ghcr.io/maselkov/gw2bot-site` as `latest` and as the full commit SHA. Set `TAG` to run a specific image, for example `TAG=v1.1.2`.
 
 ### Deployment
 

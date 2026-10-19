@@ -15,7 +15,8 @@ import * as database from './database'
  */
 
 const REPORT_BASE_URLS = ['https://dps.report/', 'https://wvw.report/']
-const METADATA_URL = 'https://dps.report/getUploadMetadata'
+const METADATA_URL = process.env.DPSREPORT_METADATA_URL ||
+  'https://dps.report/getUploadMetadata'
 const MAX_URL_LENGTH = 2083
 
 const server = express()

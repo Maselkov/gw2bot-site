@@ -1,0 +1,25 @@
+# Runs the built site against a throwaway MongoDB for the test suites.
+# The API tests start a dps.report stub on the host at port 4010.
+#
+#   docker compose -f docker-compose.test.yml up -d --build --wait
+#   npm test && npm run test:e2e:docker
+#   docker compose -f docker-compose.test.yml down
+services:
+  mongo:
+    image: mongo:9
+    ports:
+      - "127.0.0.1:27018:27017"
+
+  site:
+    build: .
+    image: ${SITE_IMAGE:-gw2bot-site:test}
+    depends_on:
+      - mongo
+    ports:
+      - "127.0.0.1:3999:3000"
+    environment:
+      MONGO_HOST: mongo
+      MONGO_DB: gw2bot_test
+      DPSREPORT_METADATA_URL: http://host.docker.internal:4010/getUploadMetadata
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
