@@ -10,7 +10,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   expect: {
-    toHaveScreenshot: { maxDiffPixels: 50 }
+    // Full-page captures of the home page take several seconds on CI runners
+    toHaveScreenshot: { maxDiffPixels: 50, timeout: 15000 }
   },
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3999',

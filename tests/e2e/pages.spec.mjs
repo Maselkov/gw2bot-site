@@ -61,6 +61,10 @@ async function settle (page) {
     && [...document.images].every(img => img.complete)
   )
   await page.evaluate(() => document.fonts.ready)
+  // Chromium's first full-page capture shifts the layout by a few pixels
+  // (64px on the desktop home page). Take it here, so the compared
+  // screenshots start from the settled layout the baselines were made from.
+  await page.screenshot({ fullPage: true })
 }
 
 for (const { name, path, status = 200 } of PAGES) {
