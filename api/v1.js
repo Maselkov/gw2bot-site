@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import express from 'express'
-import fetch from 'node-fetch'
 
 import * as database from './database'
 
@@ -42,13 +41,8 @@ function isHttpUrl (value) {
   }
 }
 
-// Express 4 doesn't catch rejected promises, so pass them to the error handler
-function catchErrors (handler) {
-  return (req, res, next) => handler(req, res, next).catch(next)
-}
-
 // Resolves the Bearer API key to its user's Discord ID
-const authenticate = catchErrors(async (req, res, next) => {
+async function authenticate (req, res, next) {
   const header = req.header('Authorization')
 
   if (!header) {
@@ -76,9 +70,9 @@ const authenticate = catchErrors(async (req, res, next) => {
 
   req.userID = apiKey.user
   next()
-})
+}
 
-server.post('/evtc/notification', authenticate, catchErrors(async (req, res) => {
+server.post('/evtc/notification', authenticate, async (req, res) => {
   const permalink = req.body?.dpsreport_url
 
   if (!isHttpUrl(permalink)) {
@@ -134,7 +128,7 @@ server.post('/evtc/notification', authenticate, catchErrors(async (req, res) => 
   })
 
   res.status(201).send({ detail: 'Successfully created' })
-}))
+})
 
 // Malformed JSON bodies, reported the way FastAPI's validation errors were
 server.use((error, req, res, next) => {

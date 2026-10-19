@@ -60,8 +60,7 @@ export default {
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/color-mode',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Settings for '@nuxtjs/style-resources' module

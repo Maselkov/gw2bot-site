@@ -104,7 +104,7 @@ input[type="radio"] {
   justify-content: center;
   align-content: flex-start;
   margin: $baseline-rem 0 0 0;
-  padding: 0 ($baseline-px * .5) $baseline-rem ($baseline-px * .5);
+  padding: 0 ($baseline-px * .5) $baseline-rem;
   border-radius: 6px;
   background: $white;
   box-shadow: $card-shadow;
@@ -113,7 +113,7 @@ input[type="radio"] {
     box-shadow: $card-shadow--dark;
   }
   @include media-query('gt-600') {
-    padding: 0 $baseline-px $baseline-rem $baseline-px;
+    padding: 0 $baseline-px $baseline-rem;
   }
 }
 

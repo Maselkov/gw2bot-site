@@ -67,7 +67,7 @@ export default {
 
 <style lang="scss" scoped>
 section {
-  padding: ($baseline-rem * 1.5) 0 ($baseline-rem * 2) 0;
+  padding: ($baseline-rem * 1.5) 0 ($baseline-rem * 2);
 }
 
 .flexbox {

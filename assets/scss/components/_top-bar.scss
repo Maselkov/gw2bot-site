@@ -169,6 +169,8 @@
     &:before {
       bottom: 8px;
     }
+    // Unrelated to the .dark-mode-button pseudo-element above
+    // stylelint-disable-next-line no-descending-specificity
     &:after {
       top: 8px;
     }

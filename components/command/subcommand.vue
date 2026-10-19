@@ -72,7 +72,7 @@ export default {
 <style lang="scss" scoped>
 .subcommand {
   position: relative;
-  margin: ($baseline-px * .5) 0 0 0;
+  margin: ($baseline-px * .5) 0 0;
   padding: ($baseline-px * .5) 0;
   border-top: 1px solid $grey-1000;
   & ~ .subcommand {

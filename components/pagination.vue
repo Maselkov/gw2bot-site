@@ -148,7 +148,7 @@ export default {
 .pagination-buttons {
   display: inline-flex;
   flex-flow: row nowrap;
-  margin: ($baseline-rem * .5) 0 $baseline-rem 0;
+  margin: ($baseline-rem * .5) 0 $baseline-rem;
   border-radius: 4px + ($p-line-px * .5);
   box-shadow: $button-shadow;
   .dark-mode & {
@@ -208,6 +208,8 @@ export default {
 
 .button--prev, .button--next {
   width: 4px + $p-line-px;
+  // Unrelated to the .ellipsis pseudo-elements above
+  // stylelint-disable-next-line no-descending-specificity
   &:after {
     @extend %Psuedo-element;
     position: relative;

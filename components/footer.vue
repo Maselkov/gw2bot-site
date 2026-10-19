@@ -52,8 +52,8 @@ export default {
 <style lang="scss" scoped>
 footer {
   position: relative;
-  margin: ($baseline-rem * 2) 0 0 0;
-  padding: 0 0 ($baseline-rem * 2) 0;
+  margin: ($baseline-rem * 2) 0 0;
+  padding: 0 0 ($baseline-rem * 2);
   text-align: center;
   width: 100%;
   background: $grey-1100;

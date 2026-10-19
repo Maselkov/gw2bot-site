@@ -204,7 +204,7 @@ export default {
 
 .feature-section {
   position: relative;
-  padding: ($baseline-rem * 1.5) 0 ($baseline-rem * 2) 0;
+  padding: ($baseline-rem * 1.5) 0 ($baseline-rem * 2);
   background: $grey-1200;
   .dark-mode & {
     background: $grey-300;

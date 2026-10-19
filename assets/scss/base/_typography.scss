@@ -136,7 +136,7 @@ ul, ol {
   li {
     counter-increment: listCounter;
     & ~ li {
-      margin: ($baseline-rem * .5) 0 0 0;
+      margin: ($baseline-rem * .5) 0 0;
     }
   }
 

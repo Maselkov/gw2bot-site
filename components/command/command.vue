@@ -174,7 +174,7 @@ export default {
 }
 
 .subcommand-list {
-  margin: 12px 0 (-12px) 0;
+  margin: 12px 0 (-12px);
   padding: 0;
   list-style: none;
   text-align: center;
