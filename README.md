@@ -142,6 +142,19 @@ use toothy
 db.getCollection("gw2.encounters").updateMany({}, { $unset: { details: true }})
 ```
 
+## Public API
+
+Third-party log uploaders such as [PlenBot](https://github.com/Plenyx/PlenBotLogUploader) use `POST https://api.gw2bot.info/v1/evtc/notification` to have GW2Bot post their dps.report logs. It's served by [`api/v1.js`](api/v1.js) at `/v1`, so the reverse proxy sends `api.gw2bot.info/v1/*` to the site unchanged.
+
+``` shell
+curl -X POST https://api.gw2bot.info/v1/evtc/notification \
+  -H "Authorization: Bearer <key from /evtc api_key generate>" \
+  -H "Content-Type: application/json" \
+  -d '{"dpsreport_url": "https://dps.report/..."}'
+```
+
+It returns `201` once the log is queued in GW2Bot's `evtc.notifications` collection, and `409` if that user already sent the same log. Error responses have a `detail` field.
+
 ## Contribution
 
 Feel free to create an issue or pull request for any improvement you would like to add.

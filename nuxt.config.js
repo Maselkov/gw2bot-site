@@ -91,7 +91,8 @@ export default {
     debug: process.env.NODE_ENV === 'development'
   },
   serverMiddleware: [
-    '~/api/api'
+    '~/api/api',
+    '~/api/v1'
   ],
   auth: {
     redirect: {
