@@ -68,7 +68,7 @@
             active-class="active"
             itemprop="url"
             exact
-            @click.native="navActive = userMenuActive = false"
+            @click.native="navActive = false"
           >
             <span class="main-nav__link-name">Home</span>
           </NuxtLink>
@@ -77,7 +77,7 @@
             class="main-nav__link"
             active-class="active"
             itemprop="url"
-            @click.native="navActive = userMenuActive = false"
+            @click.native="navActive = false"
           >
             <span class="main-nav__link-name">Commands</span>
           </NuxtLink>
@@ -86,7 +86,7 @@
             class="main-nav__link"
             active-class="active"
             itemprop="url"
-            @click.native="navActive = userMenuActive = false"
+            @click.native="navActive = false"
           >
             <span class="main-nav__link-name">
               F.A<span class="q-kern">.</span>Q
@@ -100,54 +100,6 @@
           >
             <span class="main-nav__link-name">Support</span>
           </a>
-          <template v-if="$route.name !== 'login'">
-            <div
-              v-if="$auth.loggedIn"
-              class="main-nav__group"
-              :class="{ active: userMenuActive }"
-            >
-              <button
-                class="main-nav__link"
-                :class="{ active: userMenuActive }"
-                @click="userMenuActive = !userMenuActive"
-              >
-                <span class="main-nav__link-name">
-                  <img
-                    class="main-nav__user-image"
-                    :src="`https://cdn.discordapp.com/avatars/${$auth.user.id}/${$auth.user.avatar}.webp?size=64`"
-                  ><DropdownInlineSVG />
-                </span>
-              </button>
-              <div
-                class="main-nav__sub-menu"
-                :class="{ active: userMenuActive }"
-              >
-                <div class="main-nav__user-info small-text">
-                  <span class="main-nav__user-name">
-                    {{ $auth.user.global_name }}
-                  </span>
-                </div>
-                <NuxtLink
-                  to="/logs"
-                  class="main-nav__link"
-                  active-class="active"
-                  @click.native="navActive = userMenuActive = false"
-                >
-                  <span class="main-nav__link-name">Encounter Logs</span>
-                </NuxtLink>
-                <a class="main-nav__link" @click="$auth.logout()">
-                  <span class="main-nav__link-name">Logout</span>
-                </a>
-              </div>
-            </div>
-            <a
-              v-else
-              class="main-nav__link"
-              @click="$auth.loginWith('discord')"
-            >
-              <span class="main-nav__link-name">Login</span>
-            </a>
-          </template>
         </nav>
       </div>
     </div>
@@ -155,19 +107,16 @@
 </template>
 
 <script>
-import DropdownInlineSVG from '@/components/inline-svgs/dropdown'
 import GW2BotLogo from '@/components/inline-svgs/gw2bot'
 
 export default {
   name: 'HeaderComponent',
   components: {
-    DropdownInlineSVG,
     GW2BotLogo
   },
   data () {
     return {
-      navActive: false,
-      userMenuActive: false
+      navActive: false
     }
   },
   computed: {

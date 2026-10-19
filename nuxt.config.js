@@ -49,7 +49,6 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/axios' },
     { src: '~/plugins/filters' },
     { src: '~/plugins/globalComponents' },
     { src: '~/plugins/globalVariables' },
@@ -75,44 +74,9 @@ export default {
       '~/assets/scss/_settings.scss'
     ]
   },
-  /*
-  ** Nuxt.js modules
-  */
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/auth'
-  ],
-  /*
-  ** Settings for '@nuxtjs/axios' module
-  */
-  axios: {
-    // https://axios.nuxtjs.org/options
-    credentials: true,
-    debug: process.env.NODE_ENV === 'development'
-  },
   serverMiddleware: [
-    '~/api/api',
     '~/api/v1'
   ],
-  auth: {
-    redirect: {
-      login: '/login',
-      logout: false,
-      callback: '/login',
-      home: false
-    },
-    strategies: {
-      discord: {
-        _scheme: 'oauth2',
-        authorization_endpoint: 'https://discord.com/api/oauth2/authorize',
-        userinfo_endpoint: 'https://discord.com/api/users/@me',
-        client_id: 'YOUR_BOT_ID',
-        scope: ['identify'],
-        response_type: 'token',
-        token_type: 'Bearer'
-      }
-    }
-  },
   /*
   ** Build configuration (webpack)
   */

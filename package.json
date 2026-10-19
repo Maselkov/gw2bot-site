@@ -12,12 +12,8 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/color-mode": "^2.1.1",
     "@nuxtjs/style-resources": "^1.2.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
     "express": "^4.18.2",
     "floating-vue": "^1.0.0-beta.19",
     "lazysizes": "^5.3.2",
