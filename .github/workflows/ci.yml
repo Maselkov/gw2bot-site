@@ -8,6 +8,10 @@ on:
   pull_request:
     branches: [master]
 
+# Jobs that need more ask for it
+permissions:
+  contents: read
+
 jobs:
   build:
     uses: ./.github/workflows/_build.yml

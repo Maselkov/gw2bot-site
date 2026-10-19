@@ -6,6 +6,10 @@ on:
   push:
     tags: ["v*"]
 
+# Jobs that need more ask for it
+permissions:
+  contents: read
+
 concurrency:
   group: deploy-prod
   cancel-in-progress: false
